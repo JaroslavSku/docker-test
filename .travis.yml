@@ -1,0 +1,19 @@
+sudo: required
+services:
+  - docker build -t jaroush/react-test -f ./client/Dockerfile.dev
+
+script:
+  - docker run jaroush/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t jaroush/multi-client ./client
+  - docker build -t jaroush/multi-nginx ./nginx
+  - docker build -t jaroush/multi-server ./server
+  - docker build -t jaroush/multi-worker ./worker
+  #Login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+  #Take images and push them to docker hub
+  - docker push jaroush/multi-client
+  - docker push jaroush/multi-nginx
+  - docker push jaroush/multi-server
+  - docker push jaroush/multi-worker
