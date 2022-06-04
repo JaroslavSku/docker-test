@@ -11,7 +11,7 @@ after_success:
   - docker build -t jaroush/multi-server ./server
   - docker build -t jaroush/multi-worker ./worker
   #Login to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+  - docker login -u "$DOCKER_ID" -p $DOCKER_PASSWORD
   #Take images and push them to docker hub
   - docker push jaroush/multi-client
   - docker push jaroush/multi-nginx
