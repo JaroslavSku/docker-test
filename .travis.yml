@@ -1,9 +1,14 @@
 sudo: required
+language: generic
+
 services:
-  - docker build -t jaroush/react-test -f ./client/Dockerfile.dev
+  - docker
+
+before_install:
+  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true jaroush/react-test npm test
+  - docker run -e CI=true stephengrider/react-test npm test
 
 after_success:
   - docker build -t jaroush/multi-client ./client
